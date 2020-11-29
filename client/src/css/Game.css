@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+#game {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.game-modal {
+	padding: 20px;
+	width: 300px;
+	background: rgba(0,0,0,.3);
+	border-radius: 7px;
+}
+
+.waiting-for-opponent {
+	color: rgba(255, 255, 255, 0.75);
+	font-style: italic;
+}
+
+.give-link {
+	margin-top: 25px;
+	margin-bottom: 5px;
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 16px;
+}
+
+.game-link {
+	padding: 10px;
+	background:rgba(0,0,0,.3);
+	border-radius: 2px;
+	color:rgba(255,255,255, .75);
+
+}
+
+#header {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 3vh;
+}
+
+.versus {
+	margin: 0 2vw;
+	color: rgba(0,0,0,.3);
+}
+
+.playerName, .versus {
+	font-family: 'Permanent Marker', cursive;
+	font-size: 4vmin;
+}
+
+.playerName.x {
+	color: #3498db;
+}
+
+.playerName.o {
+	color: #f39c12;
+}
+
+#board {
+	width: 80vmin;
+	height: 80vmin;
+	display: flex;
+	justify-content: space-between;
+	align-content: space-between;
+	flex-wrap: wrap;
+	font-family: 'Orbitron', sans-serif;
+	font-weight: 600;
+	font-size: 4.5vmin;
+	color: #fff;
+}
+
+.box {
+	width: 32.5%;
+	height: 32.5%;
+	display: flex;
+	justify-content: space-between;
+	align-content: space-between;
+	flex-wrap: wrap;
+}
+
+.cell {
+	width: 32.5%;
+	height: 32.5%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0,0,0,.3);
+	border-radius: 5px;
+	cursor: pointer;
+	transition: box-shadow 0.5s;
+}
+
+.box.x-taken, .box.o-taken {
+	font-size: 10vmin;
+	background: rgba(0,0,0,.3);
+	border-radius: 5px;
+	justify-content: center;
+	align-content: center;
+}
+
+.cell.x-taken, .box.x-taken {
+	color: #3498db;
+}
+
+.cell.o-taken, .box.o-taken {
+	color: #f39c12;
+}
+
+.cell.x-available {
+	box-shadow: 0 0 0.15vw 0.15vw #3498db inset;
+}
+
+.cell.o-available {
+	box-shadow: 0 0 0.15vw 0.15vw #f39c12 inset;
+}
