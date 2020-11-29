@@ -10,10 +10,9 @@
 }
 
 .game-modal {
-	padding: 20px;
+	text-align: center;
 	width: 300px;
-	background: rgba(0,0,0,.3);
-	border-radius: 7px;
+	border-radius: 10px;
 }
 
 .waiting-for-opponent {
@@ -33,7 +32,6 @@
 	background:rgba(0,0,0,.3);
 	border-radius: 2px;
 	color:rgba(255,255,255, .75);
-
 }
 
 #header {
@@ -44,7 +42,7 @@
 
 .versus {
 	margin: 0 2vw;
-	color: rgba(0,0,0,.3);
+	color: rgba(0,0,0,.4);
 }
 
 .playerName, .versus {
@@ -111,9 +109,9 @@
 }
 
 .cell.x-available {
-	box-shadow: 0 0 0.15vw 0.15vw #3498db inset;
+	box-shadow: 0 0 0.2vmin 0.2vmin #3498db inset;
 }
 
 .cell.o-available {
-	box-shadow: 0 0 0.15vw 0.15vw #f39c12 inset;
+	box-shadow: 0 0 0.2vmin 0.2vmin #f39c12 inset;
 }

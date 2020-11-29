@@ -12,9 +12,10 @@ class Game {
 		this.players[0].symbol = 'X';
 		this.players[1].symbol = '0';
 
-		for (let i = 0; i < this.players.length; ++i) {
-			this.players[i].socket.on('takeCell', this.takeCell.bind(this, i));
+		for (let i = 0; i < 2; ++i) {
 			this.players[i].send('player', this.players[i].symbol);
+			this.players[i].send('opponent', this.players[i^1].username);
+			this.players[i].socket.on('takeCell', this.takeCell.bind(this, i));
 		}
 
 		this.broadcast('startGame');
