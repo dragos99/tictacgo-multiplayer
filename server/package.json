@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
 	"dev": "nodemon index",
-	"prod": "sudo NODE_ENV=production pm2 index.js --name server"
+	"prod": "sudo NODE_ENV=production pm2 start index.js --name server"
   },
   "author": "",
   "license": "ISC",
