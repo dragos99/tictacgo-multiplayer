@@ -4,6 +4,7 @@ import socketIOClient from 'socket.io-client';
 import { withRouter } from 'react-router';
 import Board from './Board';
 import Box from '../models/Box';
+import confetti from '../confetti.js';
 
 const GameState = {
 	CONNECT: 'Connecting',
@@ -18,6 +19,7 @@ class Game extends React.Component {
 		username: '',
 		opponentUsername: '',
 		gameState: GameState.CONNECT,
+		winner: null
 	};
 
 	socket = null;
@@ -97,6 +99,7 @@ class Game extends React.Component {
 		this.board[boxId].takeCell(cellId, player);
 		this.currentPlayer = this.otherPlayer(player);
 		this.lastMove = { boxId, cellId, player };
+		this.checkWin();
 		this.updateAvailableCells();
 		this.updateLastMove();
 		this.forceUpdate();
@@ -104,6 +107,8 @@ class Game extends React.Component {
 
 	updateAvailableCells() {
 		for (const box of this.board) box.setAvailable(null);
+
+		if (this.getWinner()) return;
 
 		let targetBox = null;
 		if (this.lastMove) {
@@ -128,6 +133,30 @@ class Game extends React.Component {
 		this.board[this.lastMove.boxId].cells[this.lastMove.cellId].lastMove = this.lastMove.player;
 	}
 
+	checkWin() {
+		const winner = this.getWinner();
+		if (winner) {
+			this.setState({ winner });
+			confetti.start();
+			setTimeout(confetti.stop, 1500);
+		}
+	}
+
+	getWinner() {
+		// rows
+		for (let i = 0; i < 3; ++i) {
+			if (sameOwner(this.board[i * 3], this.board[i * 3 + 1], this.board[i * 3 + 2])) return this.board[i * 3].taken;
+		}
+		// columns
+		for (let i = 0; i < 3; ++i) {
+			if (sameOwner(this.board[i], this.board[i + 3], this.board[i + 6])) return this.board[i].taken;
+		}
+		// diagonals
+		if (sameOwner(this.board[0], this.board[4], this.board[8])) return this.board[4].taken;
+		if (sameOwner(this.board[2], this.board[4], this.board[6])) return this.board[4].taken;
+		return null;
+	}
+
 	otherPlayer(player) {
 		if (player === 'X') return '0';
 		return 'X';
@@ -141,25 +170,25 @@ class Game extends React.Component {
 		}
 	}
 
+	headerContent() {
+		if (this.state.winner === 'X') return <div className="playerName x">{this.getUsernameOf(this.state.winner)} won !!!</div>;
+		if (this.state.winner === '0') return <div className="playerName o">{this.getUsernameOf(this.state.winner)} won !!!</div>;
+
+		return (
+			<>
+				<div className="playerName x">{this.getUsernameOf('X')}</div>
+				<div className="versus">vs</div>
+				<div className="playerName o">{this.getUsernameOf('0')}</div>
+			</>
+		);
+	}
+
 	render() {
 		if (this.state.gameState === GameState.CHOOSE_USERNAME) {
 			return (
 				<div id="create-game-container">
 					<input className="text-field" type="text" onChange={this.changeUsername} placeholder="Username" value={this.state.username} />
 					<button className="big-button" id="join-game-button" onClick={this.joinGame}>Join game</button>
-				</div>
-			);
-		}
-
-		if (this.state.gameState === GameState.PLAY) {
-			return (
-				<div id="game">
-					<div id="header">
-						<div className="playerName x">{this.getUsernameOf('X')}</div>
-						<div className="versus">vs</div>
-						<div className="playerName o">{this.getUsernameOf('0')}</div>
-					</div>
-					<Board board={this.board} currentPlayer={this.currentPlayer} takeCell={this.takeCell} />
 				</div>
 			);
 		}
@@ -172,8 +201,27 @@ class Game extends React.Component {
 			</div>);
 		}
 
+		if (this.state.gameState === GameState.PLAY) {
+			return (
+				<div id="game">
+					<div id="header">
+						{this.headerContent()}
+					</div>
+					<Board board={this.board} currentPlayer={this.currentPlayer} takeCell={this.takeCell} winner={this.state.winner} />
+				</div>
+			);
+		}
+
 		return null;
 	}
+}
+
+function sameOwner(...boxes) {
+	if (!boxes[0].taken) return false;
+	for (let i = 1; i < boxes.length; ++i) {
+		if (boxes[i].taken !== boxes[0].taken) return false;
+	}
+	return true;
 }
 
 export default withRouter(Game);
